@@ -7,7 +7,7 @@ function createFilmCardTemplate(data) {
     yearProduction,
     duration,
     genre,
-    description
+    description,
   } = data;
   return `<article class="film-card">
   <h3 class="film-card__title">${name}</h3>

@@ -1,14 +1,9 @@
-import {
-  COMMENTS
-} from "../mock/film";
-
 function createFilmDetailsTemplate(data, commentsFull) {
   const {
     name,
     rating,
     poster,
     comments,
-    yearProduction,
     duration,
     genre,
     description,

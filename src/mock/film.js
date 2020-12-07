@@ -34,7 +34,7 @@ const GENRE = [`Western`, `Musical`, `Comedy`];
 const DESCRIPTIONS = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.split(`.`);
 const DIRECTORS = [`Petya Ivanov`, `Vasiliy Pupkin`, `Roman Chepuha`];
 const WRITERS = [`Anne Wigton`, `Heinz Herald`, `Richard Weil`];
-const RELEASE_DATE = [`30 March 1945`, `11 March 1999`, `10 March 2000`];
+const RELEASE_DATE = [`30 March`, `11 March`, `10 March`];
 const COUNTRYS = [`USA`, `USSR`, `Brazil`];
 
 // console.log(getRandomElementsArray(DESCRIPTIONS));
@@ -51,9 +51,13 @@ function createMockFilmCard() {
     director: getRandomArrayElement(DIRECTORS),
     writerts: getRandomElementsArray(WRITERS),
     actors: getRandomElementsArray(WRITERS),
-    releaseDate: getRandomArrayElement(RELEASE_DATE),
     country: getRandomArrayElement(COUNTRYS),
+    isInWatchList: Boolean(getRandomInteger(0, 1)),
+    isInHistory: Boolean(getRandomInteger(0, 1)),
+    isInFavorite: Boolean(getRandomInteger(0, 1))
   };
+
+  item.releaseDate = getRandomArrayElement(RELEASE_DATE) + ` ` + item.yearProduction;
   return item;
 }
 
