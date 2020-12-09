@@ -10,21 +10,38 @@ import {
 
 const FILMS_NAMES = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`];
 const POSTERS = [`sagebrush-trail.jpg`, `the-dance-of-life.jpg`, `the-man-with-the-golden-arm.jpg`];
+const EMOJI = [`angry.png`, `puke.png`, `sleeping.png`, `smile.png`];
+
 const COMMENTS = [{
   id: 1,
-  content: `WoooooW!`
+  content: `WoooooW!`,
+  author: `Petya`,
+  date: `2 days ago`,
+  rank: getRandomInteger(0, 4)
 }, {
   id: 2,
-  content: `Cooool!`
+  content: `Cooool!`,
+  author: `Bob`,
+  date: `11 days ago`,
+  rank: getRandomInteger(0, 4)
 }, {
   id: 3,
-  content: `It's amazing!`
+  content: `It's amazing!`,
+  author: `Gena`,
+  date: `14 days ago`,
+  rank: getRandomInteger(0, 4)
 }, {
   id: 4,
-  content: `What i seeeeeees?`
+  content: `What i seeeeeees?`,
+  author: `Vova`,
+  date: `54 days ago`,
+  rank: getRandomInteger(0, 4)
 }, {
   id: 5,
-  content: `Super!`
+  content: `Super!`,
+  author: `Jack`,
+  date: `74 days ago`,
+  rank: getRandomInteger(0, 4)
 }];
 
 const COMMENTS_ID = [1, 2, 3, 4, 5];
@@ -36,17 +53,18 @@ const DIRECTORS = [`Petya Ivanov`, `Vasiliy Pupkin`, `Roman Chepuha`];
 const WRITERS = [`Anne Wigton`, `Heinz Herald`, `Richard Weil`];
 const RELEASE_DATE = [`30 March`, `11 March`, `10 March`];
 const COUNTRYS = [`USA`, `USSR`, `Brazil`];
+const AGES = [18, 16, 6];
 
-// console.log(getRandomElementsArray(DESCRIPTIONS));
 function createMockFilmCard() {
   const item = {
     name: getRandomArrayElement(FILMS_NAMES),
+    originalName: getRandomArrayElement(FILMS_NAMES),
     rating: getRandomInteger(0, 10),
     poster: getRandomArrayElement(POSTERS),
     comments: Array.from(new Set(getRandomElementsArray(COMMENTS_ID))),
     yearProduction: getRandomArrayElement(YEAR_PRODUCTION),
     duration: getRandomArrayElement(DURATION),
-    genre: getRandomElementsArray(GENRE),
+    genres: getRandomElementsArray(GENRE),
     description: getRandomElementsArray(DESCRIPTIONS).join(`,`),
     director: getRandomArrayElement(DIRECTORS),
     writerts: getRandomElementsArray(WRITERS),
@@ -54,14 +72,19 @@ function createMockFilmCard() {
     country: getRandomArrayElement(COUNTRYS),
     isInWatchList: Boolean(getRandomInteger(0, 1)),
     isInHistory: Boolean(getRandomInteger(0, 1)),
-    isInFavorite: Boolean(getRandomInteger(0, 1))
+    isInFavorite: Boolean(getRandomInteger(0, 1)),
+    age: getRandomArrayElement(AGES)
   };
 
   item.releaseDate = getRandomArrayElement(RELEASE_DATE) + ` ` + item.yearProduction;
   return item;
 }
 
+const filmsMockData = new Array(15).fill().map((item, index) => createMockFilmCard(index));
+
 export {
-  createMockFilmCard,
-  COMMENTS
+  EMOJI,
+  COMMENTS,
+  filmsMockData,
+  createMockFilmCard
 };

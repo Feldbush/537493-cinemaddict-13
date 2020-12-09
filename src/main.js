@@ -1,4 +1,4 @@
-// import dayjs from 'dayjs';
+
 
 import {createUserInfoTemplate} from './view/user-Info';
 import {createMenuTemplate} from './view/menu';
@@ -9,14 +9,14 @@ import {createFilmDetailsTemplate} from './view/film-details';
 import {createBaseLayoutTemplate} from './view/base-layout';
 import {generateFilter} from "./mock/filter";
 
-import {createMockFilmCard, COMMENTS} from './mock/film';
+import {COMMENTS, filmsMockData} from './mock/film';
 
 import {getRandomArrayElement} from './utils';
 
 const QUANTITY_CARDS_IN_FILMS_LIST = 5;
 const QUANTITY_CARDS_IN_CATHEGORY_LIST = 2;
 
-const filmsMockData = new Array(15).fill().map((item, index) => createMockFilmCard(index));
+// const filmsMockData = new Array(15).fill().map((item, index) => createMockFilmCard(index));
 
 function render(container, content, place = `beforeend`) {
   container.insertAdjacentHTML(place, content);

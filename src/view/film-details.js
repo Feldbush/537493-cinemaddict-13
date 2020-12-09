@@ -1,21 +1,28 @@
+import {EMOJI} from '../mock/film';
+
 function createFilmDetailsTemplate(data, commentsFull) {
   const {
     name,
+    originalName,
     rating,
     poster,
     comments,
     duration,
-    genre,
+    genres,
     description,
     director,
     writerts,
     actors,
     releaseDate,
     country,
+    age,
+    isInWatchList,
+    isInHistory,
+    isInFavorite
   } = data;
 
-  let genres = genre.reduce((prev, item) => {
-    return prev + ` ` + `<span class="film-details__genre">${item}</span>`;
+  let genresList = genres.reduce((prev, item) => {
+    return prev + ` ` + `<span class="film-details__genres">${item}</span>`;
   }, ``);
 
   let commentsHTML = commentsFull
@@ -30,13 +37,13 @@ function createFilmDetailsTemplate(data, commentsFull) {
     .reduce((accumulator, item) => {
       const comment = accumulator + ` ` + `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji-sleeping">
+      <img src="./images/emoji/${EMOJI[item.rank]}" width="55" height="55" alt="emoji-sleeping">
     </span>
     <div>
       <p class="film-details__comment-text">${item.content}</p>
       <p class="film-details__comment-info">
-        <span class="film-details__comment-author">John Doe</span>
-        <span class="film-details__comment-day">2 days ago</span>
+        <span class="film-details__comment-author">${item.author}</span>
+        <span class="film-details__comment-day">${item.date}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
@@ -54,14 +61,14 @@ function createFilmDetailsTemplate(data, commentsFull) {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">18+</p>
+          <p class="film-details__age">${age}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${name}</h3>
-              <p class="film-details__title-original">Original: ${name}</p>
+              <p class="film-details__title-original">Original: ${originalName}</p>
             </div>
 
             <div class="film-details__rating">
@@ -76,11 +83,11 @@ function createFilmDetailsTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writerts.length > 0 ? writerts.join(`, `) : writerts}</td>
+              <td class="film-details__cell">${writerts.length > 1 ? writerts.join(`, `) : writerts}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors.length > 0 ? actors.join(`, `) : actors}</td>
+              <td class="film-details__cell">${actors.length > 1 ? actors.join(`, `) : actors}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
@@ -95,9 +102,9 @@ function createFilmDetailsTemplate(data, commentsFull) {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
+              <td class="film-details__term">${genres.length > 1 ? `genress` : `genres`}</td>
               <td class="film-details__cell">
-              ${genres}
+              ${genresList}
             </tr>
           </table>
 
@@ -108,13 +115,13 @@ function createFilmDetailsTemplate(data, commentsFull) {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchList ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>

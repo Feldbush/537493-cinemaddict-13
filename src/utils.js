@@ -11,9 +11,8 @@ export function getRandomArrayElement(array) {
 }
 
 export function getRandomElementsArray(array, maxQuantityTry = 5) {
-  const quantityTry = maxQuantityTry;
   const resultArray = [];
-  for (let index = 0; index < quantityTry; index++) {
+  for (let index = 0; index < maxQuantityTry; index++) {
     let element = getRandomArrayElement(array);
     if (element !== undefined) {
       resultArray.push(element);
