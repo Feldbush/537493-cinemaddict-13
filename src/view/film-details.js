@@ -124,7 +124,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
 
         <ul class="film-details__comments-list">
-          ${commentsHTML}
+          ${commentsTemplate}
         </ul>
 
         <div class="film-details__new-comment">
