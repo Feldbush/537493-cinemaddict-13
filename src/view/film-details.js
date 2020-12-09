@@ -8,7 +8,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
     genre,
     description,
     director,
-    writerts,
+    writers,
     actors,
     releaseDate,
     country,
