@@ -17,31 +17,31 @@ const COMMENTS = [{
   content: `WoooooW!`,
   author: `Petya`,
   date: `2 days ago`,
-  rank: getRandomInteger(0, 4)
+  rank: getRandomInteger(0, 3)
 }, {
   id: 2,
   content: `Cooool!`,
   author: `Bob`,
   date: `11 days ago`,
-  rank: getRandomInteger(0, 4)
+  rank: getRandomInteger(0, 3)
 }, {
   id: 3,
   content: `It's amazing!`,
   author: `Gena`,
   date: `14 days ago`,
-  rank: getRandomInteger(0, 4)
+  rank: getRandomInteger(0, 3)
 }, {
   id: 4,
   content: `What i seeeeeees?`,
   author: `Vova`,
   date: `54 days ago`,
-  rank: getRandomInteger(0, 4)
+  rank: getRandomInteger(0, 3)
 }, {
   id: 5,
   content: `Super!`,
   author: `Jack`,
   date: `74 days ago`,
-  rank: getRandomInteger(0, 4)
+  rank: getRandomInteger(0, 3)
 }];
 
 const COMMENTS_ID = [1, 2, 3, 4, 5];
