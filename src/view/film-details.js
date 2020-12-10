@@ -1,4 +1,8 @@
 import {EMOJI} from '../mock/film';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 function createFilmDetailsTemplate(data, commentsFull) {
   const {
@@ -15,14 +19,14 @@ function createFilmDetailsTemplate(data, commentsFull) {
     actors,
     releaseDate,
     country,
-    age,
+    minAge,
     isInWatchList,
     isInHistory,
     isInFavorite
   } = data;
 
   let genresList = genres.reduce((prev, item) => {
-    return prev + ` ` + `<span class="film-details__genres">${item}</span>`;
+    return `${prev} <span class="film-details__genres">${item}</span>`;
   }, ``);
 
   let commentsTemplate = commentsFull
@@ -35,7 +39,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
       return false;
     })
     .reduce((accumulator, item) => {
-      const comment = accumulator + ` ` + `<li class="film-details__comment">
+      const comment = `${accumulator} <li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${EMOJI[item.rank]}" width="55" height="55" alt="emoji-sleeping">
     </span>
@@ -43,7 +47,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
       <p class="film-details__comment-text">${item.content}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${item.author}</span>
-        <span class="film-details__comment-day">${item.date}</span>
+        <span class="film-details__comment-day">${dayjs().from(item.date)}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
@@ -61,7 +65,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">${age}+</p>
+          <p class="film-details__age">${minAge}+</p>
         </div>
 
         <div class="film-details__info">
@@ -83,15 +87,15 @@ function createFilmDetailsTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers.length > 1 ? writers.join(`, `) : writers}</td>
+              <td class="film-details__cell">${writers.length > 1 ? writers.join(`, `) : writers.join(``)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors.length > 1 ? actors.join(`, `) : actors}</td>
+              <td class="film-details__cell">${actors.length > 1 ? actors.join(`, `) : actors.join(``)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -102,7 +106,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genres.length > 1 ? `genress` : `genres`}</td>
+              <td class="film-details__term">${genres.length > 1 ? `Genres` : `Genre`}</td>
               <td class="film-details__cell">
               ${genresList}
             </tr>

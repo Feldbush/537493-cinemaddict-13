@@ -16,8 +16,6 @@ import {getRandomArrayElement} from './utils';
 const QUANTITY_CARDS_IN_FILMS_LIST = 5;
 const QUANTITY_CARDS_IN_CATHEGORY_LIST = 2;
 
-// const filmsMockData = new Array(15).fill().map((item, index) => createMockFilmCard(index));
-
 function render(container, content, place = `beforeend`) {
   container.insertAdjacentHTML(place, content);
 }

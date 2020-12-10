@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export function getRandomInteger(a = 0, b = 1) {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -19,4 +21,8 @@ export function getRandomElementsArray(array, maxQuantityTry = 5) {
     }
   }
   return resultArray;
+}
+
+export function getRandomDate() {
+  return dayjs().add(getRandomInteger(1, 9), `day`).valueOf();
 }
