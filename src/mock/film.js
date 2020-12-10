@@ -1,6 +1,6 @@
 import {
   getRandomInteger
-} from '../utils.js';
+} from '../utils';
 import {
   getRandomArrayElement
 } from '../utils.js';
