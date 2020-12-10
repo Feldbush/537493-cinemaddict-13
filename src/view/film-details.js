@@ -25,7 +25,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
     return prev + ` ` + `<span class="film-details__genres">${item}</span>`;
   }, ``);
 
-  let commentsHTML = commentsFull
+  let commentsTemplate = commentsFull
     .filter((item) => {
       for (let i = 0; i < comments.length; i++) {
         if (comments[i] === item.id) {
@@ -83,7 +83,7 @@ function createFilmDetailsTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writerts.length > 1 ? writerts.join(`, `) : writerts}</td>
+              <td class="film-details__cell">${writers.length > 1 ? writers.join(`, `) : writers}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>

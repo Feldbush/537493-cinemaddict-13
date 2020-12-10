@@ -67,7 +67,7 @@ function createMockFilmCard() {
     genres: getRandomElementsArray(GENRE),
     description: getRandomElementsArray(DESCRIPTIONS).join(`,`),
     director: getRandomArrayElement(DIRECTORS),
-    writerts: getRandomElementsArray(WRITERS),
+    writers: getRandomElementsArray(WRITERS),
     actors: getRandomElementsArray(WRITERS),
     country: getRandomArrayElement(COUNTRYS),
     isInWatchList: Boolean(getRandomInteger(0, 1)),
