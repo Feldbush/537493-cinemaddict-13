@@ -26,3 +26,17 @@ export function getRandomElementsArray(array, maxQuantityTry = 5) {
 export function getRandomDate() {
   return dayjs().add(getRandomInteger(1, 9), `day`).valueOf();
 }
+
+export function createElement(htmlString) {
+  const tmpContainer = document.createElement(`div`);
+  tmpContainer.innerHTML = htmlString;
+  return tmpContainer.firstChild;
+}
+
+export function render(container, content, place = `beforeend`) {
+  if (place === `afterbegin`) {
+    container.prepend(content);
+  } else if (place === `beforeend`) {
+    container.append(content);
+  }
+}

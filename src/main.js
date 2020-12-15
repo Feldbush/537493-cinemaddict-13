@@ -1,52 +1,63 @@
+import FilmListView from './view/base-layout';
+import FilmCardView from './view/film-card';
+import FilmPopUpView from './view/film-details';
+import UserInfoView from './view/user-Info';
+import MenuView from './view/menu';
+import FilterView from './view/filter';
+import ShowMoreButtonView from './view/show-more-btn';
 
-
-import {createUserInfoTemplate} from './view/user-Info';
-import {createMenuTemplate} from './view/menu';
-import {createFilterTemplate} from './view/filter';
-import {createFilmCardTemplate} from './view/film-card';
-import {createShowMoreBtnTemplate} from './view/show-more-btn';
-import {createFilmDetailsTemplate} from './view/film-details';
-import {createBaseLayoutTemplate} from './view/base-layout';
-import {generateFilter} from "./mock/filter";
+import {render} from './utils';
 
 import {COMMENTS, filmsMockData} from './mock/film';
-
-import {getRandomArrayElement} from './utils';
+import {generateFilter} from "./mock/filter";
 
 const QUANTITY_CARDS_IN_FILMS_LIST = 5;
-const QUANTITY_CARDS_IN_CATHEGORY_LIST = 2;
-
-function render(container, content, place = `beforeend`) {
-  container.insertAdjacentHTML(place, content);
-}
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
-const footerElement = document.querySelector(`.footer`);
 
-render(headerElement, createUserInfoTemplate());
+const userInfoView = new UserInfoView();
+render(headerElement, userInfoView.getElement());
+
+
 const filters = generateFilter(filmsMockData);
-render(mainElement, createMenuTemplate(filters));
+const menuView = new MenuView(filters);
+render(mainElement, menuView.getElement());
 
-render(mainElement, createFilterTemplate());
-render(mainElement, createBaseLayoutTemplate());
+const filterView = new FilterView();
+render(mainElement, filterView.getElement());
+
+const filmListView = new FilmListView();
+render(mainElement, filmListView.getElement());
 
 const filmsList = document.querySelector(`.films-list`);
-const filmsListContainre = filmsList.querySelector(`.films-list__container`);
 
-for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
-  render(filmsListContainre, createFilmCardTemplate(filmsMockData[index]));
-}
-render(filmsListContainre, createShowMoreBtnTemplate(), `afterend`);
+const filmsListContainre = document.querySelector(`.films-list__container`);
+function renderFilms() {
+  for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
+    const filmPopUp = new FilmPopUpView(filmsMockData[index], COMMENTS);
+    const filmCard = new FilmCardView(filmsMockData[index]);
 
-const cathegoryListsContainers = document.querySelectorAll(`.films-list--extra .films-list__container`);
-cathegoryListsContainers.forEach((list) => {
-  for (let index = 0; index < QUANTITY_CARDS_IN_CATHEGORY_LIST; index++) {
-    render(list, createFilmCardTemplate(getRandomArrayElement(filmsMockData)));
+    filmCard.setPosterClickHandler((evt) => {
+      evt.preventDefault();
+      document.body.classList.add(`hide-overflow`);
+      render(mainElement, filmPopUp.getElement());
+    });
+
+    filmPopUp.setCrossClickHandler((evt) => {
+      evt.preventDefault();
+      mainElement.removeChild(filmPopUp.getElement());
+      document.body.classList.remove(`hide-overflow`);
+    });
+
+    render(filmsListContainre, filmCard.getElement());
   }
-});
+}
 
-render(footerElement, createFilmDetailsTemplate(filmsMockData[0], COMMENTS), `afterend`);
+renderFilms();
+
+const showMoreButtonView = new ShowMoreButtonView();
+render(filmsList, showMoreButtonView.getElement());
 
 let countFilmsInList = QUANTITY_CARDS_IN_FILMS_LIST;
 
@@ -56,8 +67,8 @@ if (filmsMockData.length > countFilmsInList) {
     evt.preventDefault();
     filmsMockData
     .slice(countFilmsInList, countFilmsInList + QUANTITY_CARDS_IN_FILMS_LIST)
-    .forEach((filmCard) => {
-      render(filmsListContainre, createFilmCardTemplate(filmCard));
+    .forEach((filmcard) => {
+      render(filmsListContainre, new FilmCardView(filmcard).getElement());
     });
 
     countFilmsInList += QUANTITY_CARDS_IN_FILMS_LIST;
