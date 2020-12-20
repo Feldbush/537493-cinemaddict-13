@@ -1,4 +1,6 @@
-function createFilmCardTemplate(data) {
+import Component from './component';
+
+function createFilmCardViewTemplate(data) {
   const {
     name,
     rating,
@@ -31,4 +33,26 @@ function createFilmCardTemplate(data) {
 </article>`;
 }
 
-export {createFilmCardTemplate};
+export default class FilmCardView extends Component {
+  constructor(filmData) {
+    super();
+    this._data = filmData;
+    this._posterClickHandler = this._posterClickHandler.bind(this);
+  }
+
+  getTemplate() {
+    return createFilmCardViewTemplate(this._data);
+  }
+
+  _posterClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.posterClick(evt);
+  }
+
+  setPosterClickHandler(cb) {
+    this._callback.posterClick = cb;
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, this._posterClickHandler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, this._posterClickHandler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._posterClickHandler);
+  }
+}

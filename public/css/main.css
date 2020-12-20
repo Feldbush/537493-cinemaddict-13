@@ -361,6 +361,8 @@ button {
 
 .film-card__title {
   margin-right: 0.5em;
+
+  cursor: pointer;
 }
 
 .film-card__rating,

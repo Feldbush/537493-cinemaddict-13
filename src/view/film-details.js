@@ -1,10 +1,12 @@
 import {EMOJI} from '../mock/film';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Component from './component';
+import {createElement} from '../utils';
 
 dayjs.extend(relativeTime);
 
-function createFilmDetailsTemplate(data, commentsFull) {
+function createFilmPopUpViewTemplate(data, commentsFull) {
   const {
     name,
     originalName,
@@ -24,6 +26,10 @@ function createFilmDetailsTemplate(data, commentsFull) {
     isInHistory,
     isInFavorite
   } = data;
+
+  if (!name) {
+    return ``;
+  }
 
   let genresList = genres.reduce((prev, item) => {
     return `${prev} <span class="film-details__genres">${item}</span>`;
@@ -173,6 +179,29 @@ function createFilmDetailsTemplate(data, commentsFull) {
 </section>`;
 }
 
-export {
-  createFilmDetailsTemplate
-};
+export default class FilmPopUpView extends Component {
+  constructor(filmData, commentsFull) {
+    super();
+    this._data = filmData;
+    this._comments = commentsFull;
+    this._crossClickHandler = this._crossClickHandler.bind(this);
+  }
+
+  getTemplate() {
+    return createFilmPopUpViewTemplate(this._data, this._comments);
+  }
+
+  updateElement(data) {
+    this._element = createElement(createFilmPopUpViewTemplate(data, this._comments));
+  }
+
+  _crossClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.crossClick(evt);
+  }
+
+  setCrossClickHandler(cb) {
+    this._callback.crossClick = cb;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
+  }
+}

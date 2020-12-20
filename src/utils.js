@@ -1,5 +1,10 @@
 import dayjs from 'dayjs';
 
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 export function getRandomInteger(a = 0, b = 1) {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -25,4 +30,18 @@ export function getRandomElementsArray(array, maxQuantityTry = 5) {
 
 export function getRandomDate() {
   return dayjs().add(getRandomInteger(1, 9), `day`).valueOf();
+}
+
+export function createElement(htmlString) {
+  const tmpContainer = document.createElement(`div`);
+  tmpContainer.innerHTML = htmlString;
+  return tmpContainer.firstChild;
+}
+
+export function render(container, content, place = RenderPosition.BEFOREEND) {
+  if (place === RenderPosition.AFTERBEGIN) {
+    container.prepend(content);
+  } else if (place === RenderPosition.BEFOREEND) {
+    container.append(content);
+  }
 }
