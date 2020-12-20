@@ -2,6 +2,7 @@ import {EMOJI} from '../mock/film';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Component from './component';
+import {createElement} from '../utils';
 
 dayjs.extend(relativeTime);
 
@@ -25,6 +26,10 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
     isInHistory,
     isInFavorite
   } = data;
+
+  if (!name) {
+    return ``;
+  }
 
   let genresList = genres.reduce((prev, item) => {
     return `${prev} <span class="film-details__genres">${item}</span>`;
@@ -184,6 +189,10 @@ export default class FilmPopUpView extends Component {
 
   getTemplate() {
     return createFilmPopUpViewTemplate(this._data, this._comments);
+  }
+
+  updateElement(data) {
+    this._element = createElement(createFilmPopUpViewTemplate(data, this._comments));
   }
 
   _crossClickHandler(evt) {

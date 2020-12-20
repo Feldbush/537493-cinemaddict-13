@@ -32,25 +32,32 @@ render(mainElement, filmListView.getElement());
 
 const filmsList = document.querySelector(`.films-list`);
 
-const filmsListContainre = document.querySelector(`.films-list__container`);
-function renderFilms() {
-  for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
-    const filmPopUp = new FilmPopUpView(filmsMockData[index], COMMENTS);
-    const filmCard = new FilmCardView(filmsMockData[index]);
+const filmsListContainer = document.querySelector(`.films-list__container`);
 
-    filmCard.setPosterClickHandler((evt) => {
-      evt.preventDefault();
-      document.body.classList.add(`hide-overflow`);
-      render(mainElement, filmPopUp.getElement());
-    });
+const filmPopUp = new FilmPopUpView({}, COMMENTS);
+filmPopUp.getElement();
 
-    filmPopUp.setCrossClickHandler((evt) => {
-      evt.preventDefault();
+function renderFilmCard(data) {
+  const filmCard = new FilmCardView(data);
+
+  filmCard.setPosterClickHandler((evt) => {
+    evt.preventDefault();
+    document.body.classList.add(`hide-overflow`);
+    filmPopUp.updateElement(filmCard._data);
+    filmPopUp.setCrossClickHandler((e) => {
+      e.preventDefault();
       mainElement.removeChild(filmPopUp.getElement());
       document.body.classList.remove(`hide-overflow`);
     });
+    render(mainElement, filmPopUp.getElement());
+  });
 
-    render(filmsListContainre, filmCard.getElement());
+  render(filmsListContainer, filmCard.getElement());
+}
+
+function renderFilms() {
+  for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
+    renderFilmCard(filmsMockData[index]);
   }
 }
 
@@ -62,13 +69,13 @@ render(filmsList, showMoreButtonView.getElement());
 let countFilmsInList = QUANTITY_CARDS_IN_FILMS_LIST;
 
 if (filmsMockData.length > countFilmsInList) {
-  const showMoreBtn = filmsList.querySelector(`.films-list__show-more`);
+  const showMoreBtn = showMoreButtonView.getElement();
   showMoreBtn.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     filmsMockData
     .slice(countFilmsInList, countFilmsInList + QUANTITY_CARDS_IN_FILMS_LIST)
-    .forEach((filmcard) => {
-      render(filmsListContainre, new FilmCardView(filmcard).getElement());
+    .forEach((filmCard) => {
+      renderFilmCard(filmCard);
     });
 
     countFilmsInList += QUANTITY_CARDS_IN_FILMS_LIST;
