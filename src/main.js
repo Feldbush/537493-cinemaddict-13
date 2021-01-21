@@ -6,9 +6,7 @@ import MenuView from './view/menu';
 import FilterView from './view/filter';
 import ShowMoreButtonView from './view/show-more-btn';
 
-import {
-  render
-} from './utils';
+import {render, isEmptyData} from './utils';
 
 import {
   COMMENTS,
@@ -23,91 +21,91 @@ const QUANTITY_CARDS_IN_FILMS_LIST = 5;
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 
-const userInfoView = new UserInfoView();
-render(headerElement, userInfoView.getElement());
-
-
 const filters = generateFilter(filmsMockData);
 const menuView = new MenuView(filters);
 render(mainElement, menuView.getElement());
 
-const filterView = new FilterView();
-render(mainElement, filterView.getElement());
+if (isEmptyData(filmsMockData)) {
+  const filterView = new FilterView();
+  render(mainElement, filterView.getElement());
+}
 
 const filmListView = new FilmListView();
 render(mainElement, filmListView.getElement());
 
-// const filmsList = document.querySelector(`.films-list`);
+if (isEmptyData(filmsMockData)) {
+  const userInfoView = new UserInfoView();
+  render(headerElement, userInfoView.getElement());
 
-// const filmsListContainer = document.querySelector(`.films-list__container`);
+  const filmsList = document.querySelector(`.films-list`);
 
-const filmPopUp = new FilmPopUpView({}, COMMENTS);
-let filmPopUpState = false;
+  const filmsListContainer = document.querySelector(`.films-list__container`);
 
-function onEscKeyDown(evt) {
-  if (evt.key === `Escape` || evt.key === `Esc`) {
-    evt.preventDefault();
-    removeFilmPopUp();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  }
-};
+  const filmPopUp = new FilmPopUpView({}, COMMENTS);
+  filmPopUp.getElement();
 
-function removeFilmPopUp() {
-  filmPopUpState = false;
-  mainElement.removeChild(filmPopUp.getElement());
-  document.body.classList.remove(`hide-overflow`);
-}
+  const renderFilmCard = function (data) {
+    const filmCard = new FilmCardView(data);
 
-let countFilmsInList = 0;
+    filmCard.setPosterClickHandler((evt) => {
+      evt.preventDefault();
+      document.body.classList.add(`hide-overflow`);
 
-function renderFilmCard(data) {
-  const filmCard = new FilmCardView(data);
+      const backdrop = document.createElement(`div`);
+      backdrop.style.cssText = `
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: auto;
+      z-index: 1;
+    `;
+      document.body.append(backdrop);
 
-  filmCard.setPosterClickHandler((evt) => {
-    if (filmPopUpState) return;
-    evt.preventDefault();
-    document.body.classList.add(`hide-overflow`);
-    filmPopUp.updateElement(filmCard._data);
-    filmPopUp.setCrossClickHandler((e) => {
-      e.preventDefault();
-      removeFilmPopUp();
-    });
-    filmPopUpState = true;
-    document.addEventListener(`keydown`, onEscKeyDown);
-    render(mainElement, filmPopUp.getElement());
-  });
-
-  render(filmListView.getContainer(), filmCard.getElement());
-  countFilmsInList++;
-}
-
-function renderFilms() {
-  for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
-    renderFilmCard(filmsMockData[index]);
-  }
-}
-
-renderFilms();
-
-if (filmsMockData.length > countFilmsInList) {
-  const showMoreButtonView = new ShowMoreButtonView();
-  render(filmListView.getElement(), showMoreButtonView.getElement());
-
-  const showMoreBtn = showMoreButtonView.getElement();
-  showMoreBtn.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    filmsMockData
-      .slice(countFilmsInList, countFilmsInList + QUANTITY_CARDS_IN_FILMS_LIST)
-      .forEach((filmCard) => {
-        renderFilmCard(filmCard);
+      filmPopUp.updateElement(filmCard._data);
+      filmPopUp.setCrossClickHandler((e) => {
+        e.preventDefault();
+        mainElement.removeChild(filmPopUp.getElement());
+        document.body.classList.remove(`hide-overflow`);
+        document.body.removeChild(backdrop);
       });
+      render(mainElement, filmPopUp.getElement());
+    });
 
-    countFilmsInList += QUANTITY_CARDS_IN_FILMS_LIST;
+    render(filmsListContainer, filmCard.getElement());
+  };
 
-    if (countFilmsInList >= filmsMockData.length) {
-      showMoreBtn.remove();
+  const renderFilms = function () {
+    for (let index = 0; index < QUANTITY_CARDS_IN_FILMS_LIST; index++) {
+      renderFilmCard(filmsMockData[index]);
     }
-  });
+  };
+
+  renderFilms();
+
+  const showMoreButtonView = new ShowMoreButtonView();
+  render(filmsList, showMoreButtonView.getElement());
+
+  let countFilmsInList = QUANTITY_CARDS_IN_FILMS_LIST;
+
+  if (filmsMockData.length > countFilmsInList) {
+    const showMoreBtn = showMoreButtonView.getElement();
+    showMoreBtn.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      filmsMockData
+        .slice(countFilmsInList, countFilmsInList + QUANTITY_CARDS_IN_FILMS_LIST)
+        .forEach((filmCard) => {
+          renderFilmCard(filmCard);
+        });
+
+      countFilmsInList += QUANTITY_CARDS_IN_FILMS_LIST;
+
+      if (countFilmsInList >= filmsMockData.length) {
+        showMoreBtn.remove();
+      }
+    });
+  }
 }
 
-filmListView.emptyCheck();
+filmListView.isEmptyCheck();

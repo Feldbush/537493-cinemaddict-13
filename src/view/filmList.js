@@ -1,7 +1,7 @@
-import Component from './component';
 import {createElement} from '../utils';
+import Component from './component';
 
-function createFilmListTemplate() {
+function createBaseLayoutTemplate() {
   return `<section class="films">
   <section class="films-list">
     <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
@@ -10,23 +10,16 @@ function createFilmListTemplate() {
 </section>`;
 }
 
+
 export default class FilmList extends Component {
   getTemplate() {
-    return createFilmListTemplate();
+    return createBaseLayoutTemplate();
   }
 
-  getContainer() {
-    return this.getElement().querySelector(`.films-list__container`);
-  }
-
-  isEmpty() {
-    return this.getContainer().children.length < 1 ? true : false;
-  }
-
-  emptyCheck() {
-    if (this.isEmpty()) {
-      const message = createElement(`<h2 class="films-list__title">There are no movies in our database</h2>`);
-      this.getContainer().appendChild(message);
+  isEmptyCheck() {
+    if (this.getElement().querySelector(`.films-list__container`).children.length < 1) {
+      let mockTitle = createElement(`<h2 class="films-list__title">There are no movies in our database</h2>`);
+      this.getElement().querySelector(`.films-list`).append(mockTitle);
     }
   }
 }
