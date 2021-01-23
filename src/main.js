@@ -64,12 +64,16 @@ if (!isEmptyData(filmsMockData)) {
       document.body.append(backdrop);
 
       filmPopUp.updateElement(filmCard._data);
-      filmPopUp.setCrossClickHandler((e) => {
+      const closeFilmPopUp = (e) => {
         e.preventDefault();
         mainElement.removeChild(filmPopUp.getElement());
         document.body.classList.remove(`hide-overflow`);
         document.body.removeChild(backdrop);
-      });
+      };
+
+      filmPopUp.setCrossClickHandler(closeFilmPopUp);
+      filmPopUp.setEscKeyPressHandler(closeFilmPopUp);
+
       render(mainElement, filmPopUp.getElement());
     });
 
