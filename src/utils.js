@@ -47,8 +47,5 @@ export function render(container, content, place = RenderPosition.BEFOREEND) {
 }
 
 export function isEmptyData(data) {
-  if (Array.isArray(data) && data.length > 0) {
-    return true;
-  }
-  return false;
+  return !(Array.isArray(data) && data.length > 0);
 }

@@ -25,7 +25,7 @@ const filters = generateFilter(filmsMockData);
 const menuView = new MenuView(filters);
 render(mainElement, menuView.getElement());
 
-if (isEmptyData(filmsMockData)) {
+if (!isEmptyData(filmsMockData)) {
   const filterView = new FilterView();
   render(mainElement, filterView.getElement());
 }
@@ -33,7 +33,7 @@ if (isEmptyData(filmsMockData)) {
 const filmListView = new FilmListView();
 render(mainElement, filmListView.getElement());
 
-if (isEmptyData(filmsMockData)) {
+if (!isEmptyData(filmsMockData)) {
   const userInfoView = new UserInfoView();
   render(headerElement, userInfoView.getElement());
 
@@ -108,4 +108,4 @@ if (isEmptyData(filmsMockData)) {
   }
 }
 
-filmListView.isEmptyCheck();
+filmListView.isEmptyCheck(filmsMockData);

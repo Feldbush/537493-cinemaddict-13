@@ -8,7 +8,7 @@ const filmTofilterMap = {
 };
 
 export function generateFilter(films) {
-  if (!isEmptyData(films)) {
+  if (isEmptyData(films)) {
     films = [];
   }
 
