@@ -8,8 +8,13 @@ import ShowMoreButtonView from './view/show-more-btn';
 
 import {render, isEmptyData} from './utils';
 
-import {COMMENTS, filmsMockData} from './mock/film';
-import {generateFilter} from "./mock/filter";
+import {
+  COMMENTS,
+  filmsMockData
+} from './mock/film';
+import {
+  generateFilter
+} from "./mock/filter";
 
 const QUANTITY_CARDS_IN_FILMS_LIST = 5;
 
@@ -20,7 +25,7 @@ const filters = generateFilter(filmsMockData);
 const menuView = new MenuView(filters);
 render(mainElement, menuView.getElement());
 
-if (isEmptyData(filmsMockData)) {
+if (!isEmptyData(filmsMockData)) {
   const filterView = new FilterView();
   render(mainElement, filterView.getElement());
 }
@@ -28,7 +33,7 @@ if (isEmptyData(filmsMockData)) {
 const filmListView = new FilmListView();
 render(mainElement, filmListView.getElement());
 
-if (isEmptyData(filmsMockData)) {
+if (!isEmptyData(filmsMockData)) {
   const userInfoView = new UserInfoView();
   render(headerElement, userInfoView.getElement());
 
@@ -59,12 +64,16 @@ if (isEmptyData(filmsMockData)) {
       document.body.append(backdrop);
 
       filmPopUp.updateElement(filmCard._data);
-      filmPopUp.setCrossClickHandler((e) => {
+      const closeFilmPopUp = (e) => {
         e.preventDefault();
         mainElement.removeChild(filmPopUp.getElement());
         document.body.classList.remove(`hide-overflow`);
         document.body.removeChild(backdrop);
-      });
+      };
+
+      filmPopUp.setCrossClickHandler(closeFilmPopUp);
+      filmPopUp.setEscKeyPressHandler(closeFilmPopUp);
+
       render(mainElement, filmPopUp.getElement());
     });
 
@@ -103,4 +112,4 @@ if (isEmptyData(filmsMockData)) {
   }
 }
 
-filmListView.isEmptyCheck();
+filmListView.isEmptyCheck(filmsMockData);
