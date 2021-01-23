@@ -185,6 +185,7 @@ export default class FilmPopUpView extends Component {
     this._data = filmData;
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
+    this._escKeyPressHandler = this._escKeyPressHandler.bind(this);
   }
 
   getTemplate() {
@@ -203,5 +204,18 @@ export default class FilmPopUpView extends Component {
   setCrossClickHandler(cb) {
     this._callback.crossClick = cb;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
+  }
+
+  _escKeyPressHandler(evt) {
+    evt.preventDefault();
+    if (evt.key === `Escape`) {
+      this._callback.escKeyPressDocument(evt);
+      document.removeEventListener(`keydown`, this._escKeyPressHandler);
+    }
+  }
+
+  setEscKeyPressHandler(cb) {
+    this._callback.escKeyPressDocument = cb;
+    document.addEventListener(`keydown`, this._escKeyPressHandler);
   }
 }

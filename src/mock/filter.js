@@ -1,3 +1,4 @@
+import {isEmptyData} from '../utils.js';
 
 const filmTofilterMap = {
   'All movies': (films) => films.length,
@@ -7,10 +8,16 @@ const filmTofilterMap = {
 };
 
 export function generateFilter(films) {
-  return Object.entries(filmTofilterMap).map(([filterName, countFilter]) => {
+  if (isEmptyData(films)) {
+    films = [];
+  }
+
+  const result = Object.entries(filmTofilterMap).map(([filterName, countFilter]) => {
     return {
       name: filterName,
       count: countFilter(films)
     };
   });
+
+  return result;
 }

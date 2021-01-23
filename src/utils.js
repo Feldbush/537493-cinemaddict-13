@@ -45,3 +45,7 @@ export function render(container, content, place = RenderPosition.BEFOREEND) {
     container.append(content);
   }
 }
+
+export function isEmptyData(data) {
+  return !(Array.isArray(data) && data.length > 0);
+}
