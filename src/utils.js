@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Component from './view/component.js';
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -39,6 +40,13 @@ export function createElement(htmlString) {
 }
 
 export function render(container, content, place = RenderPosition.BEFOREEND) {
+  if (container instanceof Component) {
+    container = container.getElement();
+  }
+  if (content instanceof Component) {
+    content = content.getElement();
+  }
+
   if (place === RenderPosition.AFTERBEGIN) {
     container.prepend(content);
   } else if (place === RenderPosition.BEFOREEND) {

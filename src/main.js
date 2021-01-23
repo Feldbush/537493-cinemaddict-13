@@ -23,26 +23,25 @@ const mainElement = document.querySelector(`.main`);
 
 const filters = generateFilter(filmsMockData);
 const menuView = new MenuView(filters);
-render(mainElement, menuView.getElement());
+render(mainElement, menuView);
 
 if (!isEmptyData(filmsMockData)) {
   const filterView = new FilterView();
-  render(mainElement, filterView.getElement());
+  render(mainElement, filterView);
 }
 
 const filmListView = new FilmListView();
-render(mainElement, filmListView.getElement());
+render(mainElement, filmListView);
 
 if (!isEmptyData(filmsMockData)) {
   const userInfoView = new UserInfoView();
-  render(headerElement, userInfoView.getElement());
+  render(headerElement, userInfoView);
 
   const filmsList = document.querySelector(`.films-list`);
 
   const filmsListContainer = document.querySelector(`.films-list__container`);
 
   const filmPopUp = new FilmPopUpView({}, COMMENTS);
-  filmPopUp.getElement();
 
   const renderFilmCard = function (data) {
     const filmCard = new FilmCardView(data);
@@ -74,10 +73,10 @@ if (!isEmptyData(filmsMockData)) {
       filmPopUp.setCrossClickHandler(closeFilmPopUp);
       filmPopUp.setEscKeyPressHandler(closeFilmPopUp);
 
-      render(mainElement, filmPopUp.getElement());
+      render(mainElement, filmPopUp);
     });
 
-    render(filmsListContainer, filmCard.getElement());
+    render(filmsListContainer, filmCard);
   };
 
   const renderFilms = function () {
@@ -89,7 +88,7 @@ if (!isEmptyData(filmsMockData)) {
   renderFilms();
 
   const showMoreButtonView = new ShowMoreButtonView();
-  render(filmsList, showMoreButtonView.getElement());
+  render(filmsList, showMoreButtonView);
 
   let countFilmsInList = QUANTITY_CARDS_IN_FILMS_LIST;
 
