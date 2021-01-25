@@ -199,6 +199,7 @@ export default class FilmPopUpView extends Component {
   _crossClickHandler(evt) {
     evt.preventDefault();
     this._callback.crossClick(evt);
+    this.removeEscKeyPressHandler();
   }
 
   setCrossClickHandler(cb) {
@@ -207,15 +208,18 @@ export default class FilmPopUpView extends Component {
   }
 
   _escKeyPressHandler(evt) {
-    evt.preventDefault();
     if (evt.key === `Escape`) {
       this._callback.escKeyPressDocument(evt);
-      document.removeEventListener(`keydown`, this._escKeyPressHandler);
+      this.removeEscKeyPressHandler();
     }
   }
 
   setEscKeyPressHandler(cb) {
     this._callback.escKeyPressDocument = cb;
     document.addEventListener(`keydown`, this._escKeyPressHandler);
+  }
+
+  removeEscKeyPressHandler() {
+    document.removeEventListener(`keydown`, this._escKeyPressHandler);
   }
 }

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Component from './view/component';
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -39,6 +40,13 @@ export function createElement(htmlString) {
 }
 
 export function render(container, content, place = RenderPosition.BEFOREEND) {
+  if (container instanceof Component) {
+    container = container.getElement();
+  }
+  if (content instanceof Component) {
+    content = content.getElement();
+  }
+
   if (place === RenderPosition.AFTERBEGIN) {
     container.prepend(content);
   } else if (place === RenderPosition.BEFOREEND) {
@@ -46,6 +54,51 @@ export function render(container, content, place = RenderPosition.BEFOREEND) {
   }
 }
 
+export function replace(newChild, oldChild) {
+  if (oldChild instanceof Component) {
+    oldChild = oldChild.getElement();
+  }
+
+  if (newChild instanceof Component) {
+    newChild = newChild.getElement();
+  }
+
+  const parent = oldChild.parentElement;
+
+  if (parent === null || oldChild === null || newChild === null) {
+    throw new Error(`Can't replace unexisting elements`);
+  }
+
+  parent.replaceChild(newChild, oldChild);
+}
+
+export function remove(component) {
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof Component)) {
+    throw new Error(`Can remove only components`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+}
+
 export function isEmptyData(data) {
   return !(Array.isArray(data) && data.length > 0);
+}
+
+export function updateItem(items, update) {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1)
+  ];
 }

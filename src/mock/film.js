@@ -50,9 +50,11 @@ const DIRECTORS = [`Petya Ivanov`, `Vasiliy Pupkin`, `Roman Chepuha`];
 const WRITERS = [`Anne Wigton`, `Heinz Herald`, `Richard Weil`];
 const COUNTRYS = [`USA`, `USSR`, `Brazil`];
 const AGES = [18, 16, 6];
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 function createMockFilmCard() {
   const item = {
+    id: generateId(),
     name: getRandomArrayElement(FILMS_NAMES),
     originalName: getRandomArrayElement(FILMS_NAMES),
     rating: getRandomInteger(0, 10),
