@@ -1,4 +1,4 @@
-import {createElement, isEmptyData} from '../utils';
+import {createElement} from '../utils';
 import Component from './component';
 
 function createBaseLayoutTemplate() {
@@ -16,10 +16,16 @@ export default class FilmList extends Component {
     return createBaseLayoutTemplate();
   }
 
-  isEmptyCheck(data) {
-    if (isEmptyData(data)) {
-      let mockTitle = createElement(`<h2 class="films-list__title">There are no movies in our database</h2>`);
-      this.getElement().querySelector(`.films-list`).append(mockTitle);
-    }
+  emptyListRender() {
+    let mockTitle = createElement(`<h2 class="films-list__title">There are no movies in our database</h2>`);
+    this.getElement().querySelector(`.films-list`).append(mockTitle);
+  }
+
+  getFilmsContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
+  }
+
+  getWrapper() {
+    return this.getElement().querySelector(`.films-list`);
   }
 }

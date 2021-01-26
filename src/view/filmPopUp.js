@@ -186,6 +186,10 @@ export default class FilmPopUpView extends Component {
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
     this._escKeyPressHandler = this._escKeyPressHandler.bind(this);
+
+    this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
+    this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
   }
 
   getTemplate() {
@@ -199,6 +203,7 @@ export default class FilmPopUpView extends Component {
   _crossClickHandler(evt) {
     evt.preventDefault();
     this._callback.crossClick(evt);
+    this.removeEscKeyPressHandler();
   }
 
   setCrossClickHandler(cb) {
@@ -207,15 +212,48 @@ export default class FilmPopUpView extends Component {
   }
 
   _escKeyPressHandler(evt) {
-    evt.preventDefault();
     if (evt.key === `Escape`) {
       this._callback.escKeyPressDocument(evt);
-      document.removeEventListener(`keydown`, this._escKeyPressHandler);
+      this.removeEscKeyPressHandler();
     }
   }
 
   setEscKeyPressHandler(cb) {
     this._callback.escKeyPressDocument = cb;
     document.addEventListener(`keydown`, this._escKeyPressHandler);
+  }
+
+  removeEscKeyPressHandler() {
+    document.removeEventListener(`keydown`, this._escKeyPressHandler);
+  }
+
+  _handleAddWatchListClick(evt) {
+    evt.preventDefault();
+    this._callback.addWatchListClick(evt);
+  }
+
+  setHandleAddWatchListClick(cb) {
+    this._callback.addWatchListClick = cb;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._handleAddWatchListClick);
+  }
+
+  _handleAddWatchedListClick(evt) {
+    evt.preventDefault();
+    this._callback.addWatchedListClick(evt);
+  }
+
+  setHandleAddWatchedListClick(cb) {
+    this._callback.addWatchedListClick = cb;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._handleAddWatchedListClick);
+  }
+
+  _handleAddFavoriteClick(evt) {
+    evt.preventDefault();
+    this._callback.addFavoriteClick(evt);
+  }
+
+  setHandleAddFavoriteClick(cb) {
+    this._callback.addFavoriteClick = cb;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._handleAddFavoriteClick);
   }
 }
