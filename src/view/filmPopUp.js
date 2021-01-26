@@ -186,6 +186,7 @@ export default class FilmPopUpView extends Component {
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
     this._escKeyPressHandler = this._escKeyPressHandler.bind(this);
+
     this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
     this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
     this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
@@ -207,7 +208,6 @@ export default class FilmPopUpView extends Component {
 
   setCrossClickHandler(cb) {
     this._callback.crossClick = cb;
-    console.log(this.getElement().querySelector(`.film-details__close-btn`));
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
   }
 
@@ -234,8 +234,7 @@ export default class FilmPopUpView extends Component {
 
   setHandleAddWatchListClick(cb) {
     this._callback.addWatchListClick = cb;
-    console.log(this.getElement().querySelector(`.film-details__control-label--watchlist`));
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, () => {console.log(`134`)});
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._handleAddWatchListClick);
   }
 
   _handleAddWatchedListClick(evt) {
