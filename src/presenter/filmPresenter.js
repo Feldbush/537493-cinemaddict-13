@@ -45,6 +45,12 @@ export default class FilmPresenter {
     this._filmComponent.setHandleAddWatchedListClick(this._handleAddWatchedListClick);
     this._filmComponent.setHandleAddFavoriteClick(this._handleAddFavoriteClick);
 
+    this._filmPopUp.setHandleAddWatchListClick(this._handleAddWatchListClick);
+    this._filmPopUp.setHandleAddWatchedListClick(this._handleAddWatchedListClick);
+    this._filmPopUp.setHandleAddFavoriteClick(this._handleAddFavoriteClick);
+
+    this._filmPopUp.setCrossClickHandler(this._closeFilmPopUpHandler);
+
     if (prevFilmComponent === null || prevFilmPopUp === null) {
       render(this._container, this._filmComponent);
       return;
@@ -82,6 +88,10 @@ export default class FilmPresenter {
 
     this._filmPopUp.setCrossClickHandler(this._closeFilmPopUpHandler);
     this._filmPopUp.setEscKeyPressHandler(this._closeFilmPopUpHandler);
+
+    // this._filmPopUp.setHandleAddWatchListClick(this._handleAddWatchListClick);
+    // this._filmPopUp.setHandleAddWatchedListClick(this._handleAddWatchedListClick);
+    // this._filmPopUp.setHandleAddFavoriteClick(this._handleAddFavoriteClick);
 
     this._changeMode();
     this._mode = Mode.POPUP;

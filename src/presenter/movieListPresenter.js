@@ -118,6 +118,7 @@ export default class MovieList {
   }
 
   _handleFilmCardChange(updateFilmCard) {
+    console.log(updateFilmCard);
     this._filmsData = updateItem(this._filmsData, updateFilmCard);
     this._filmPresenter[updateFilmCard.id].init(updateFilmCard, this._comments);
   }

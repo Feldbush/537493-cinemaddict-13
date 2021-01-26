@@ -186,6 +186,9 @@ export default class FilmPopUpView extends Component {
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
     this._escKeyPressHandler = this._escKeyPressHandler.bind(this);
+    this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
+    this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
   }
 
   getTemplate() {
@@ -204,6 +207,7 @@ export default class FilmPopUpView extends Component {
 
   setCrossClickHandler(cb) {
     this._callback.crossClick = cb;
+    console.log(this.getElement().querySelector(`.film-details__close-btn`));
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
   }
 
@@ -221,5 +225,36 @@ export default class FilmPopUpView extends Component {
 
   removeEscKeyPressHandler() {
     document.removeEventListener(`keydown`, this._escKeyPressHandler);
+  }
+
+  _handleAddWatchListClick(evt) {
+    evt.preventDefault();
+    this._callback.addWatchListClick(evt);
+  }
+
+  setHandleAddWatchListClick(cb) {
+    this._callback.addWatchListClick = cb;
+    console.log(this.getElement().querySelector(`.film-details__control-label--watchlist`));
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, () => {console.log(`134`)});
+  }
+
+  _handleAddWatchedListClick(evt) {
+    evt.preventDefault();
+    this._callback.addWatchedListClick(evt);
+  }
+
+  setHandleAddWatchedListClick(cb) {
+    this._callback.addWatchedListClick = cb;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._handleAddWatchedListClick);
+  }
+
+  _handleAddFavoriteClick(evt) {
+    evt.preventDefault();
+    this._callback.addFavoriteClick(evt);
+  }
+
+  setHandleAddFavoriteClick(cb) {
+    this._callback.addFavoriteClick = cb;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._handleAddFavoriteClick);
   }
 }
