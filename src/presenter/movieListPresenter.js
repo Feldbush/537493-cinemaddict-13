@@ -108,7 +108,6 @@ export default class MovieList {
   }
 
   _renderFilms() {
-    // Нужно функцию эту ривести в нормальный вид, чтобы реализовать механику как в примере
     for (let index = 0; index < this._filmsCountPerStep; index++) {
       this._renderFilmCard(this._filmsData[index]);
     }

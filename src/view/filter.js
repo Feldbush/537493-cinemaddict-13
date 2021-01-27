@@ -26,7 +26,6 @@ export default class FilterView extends Component {
     }
 
     evt.preventDefault();
-    // console.log(evt.target.dataset.sortType);
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
