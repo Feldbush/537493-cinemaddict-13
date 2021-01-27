@@ -101,7 +101,7 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM`)}</td>
+              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM YYYY`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
