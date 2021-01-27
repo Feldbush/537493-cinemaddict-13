@@ -5,7 +5,7 @@ import FilterView from '../view/filter';
 import ShowMoreButtonView from '../view/showMoreBtn';
 import FilmPresenter from './filmPresenter';
 
-import {render, isEmptyData, remove, updateItem} from '../utils.js';
+import {render, isEmptyData, remove, updateItem, SortType, getDateDiff, getRatingDiff} from '../utils.js';
 
 import {
   generateFilter
@@ -20,6 +20,7 @@ export default class MovieList {
     this._container = mainElement;
     this._header = headerElement;
     this._filmsData = filmsData.slice();
+    this._sourcedFilmsData = filmsData.slice();
     this._comments = comments;
     this._filters = generateFilter(filmsData);
 
@@ -31,10 +32,12 @@ export default class MovieList {
     this._filmsCountPerStep = QUANTITY_CARDS_IN_FILMS_LIST;
     this._countFilmsInList = QUANTITY_CARDS_IN_FILMS_LIST;
     this._filmPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
     this._handleShowMoreBtn = this._handleShowMoreBtn.bind(this);
     this._handleFilmCardChange = this._handleFilmCardChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init() {
@@ -44,7 +47,6 @@ export default class MovieList {
       this._renderFilmList();
       this._renderUserInfo();
       this._renderFilms();
-      this._renderShowMoreButton();
     } else {
       this._renderEmptyFilmList();
     }
@@ -54,12 +56,40 @@ export default class MovieList {
     render(this._container, this._menuView);
   }
 
+  _sortFilmsCards(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._filmsData.sort(getDateDiff);
+        break;
+      case SortType.RATING:
+        this._filmsData.sort(getRatingDiff);
+        break;
+
+      default:
+        this._filmsData = this._sourcedFilmsData.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortFilmsCards(sortType);
+    this._clearFilmsList();
+    this._renderFilms();
+  }
+
   _renderFilter() {
     render(this._container, this._filterView);
+    this._filterView.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderFilmList() {
     render(this._container, this._filmListView);
+    this._renderShowMoreButton();
   }
 
   _renderEmptyFilmList() {
@@ -78,6 +108,7 @@ export default class MovieList {
   }
 
   _renderFilms() {
+    // Нужно функцию эту ривести в нормальный вид, чтобы реализовать механику как в примере
     for (let index = 0; index < this._filmsCountPerStep; index++) {
       this._renderFilmCard(this._filmsData[index]);
     }

@@ -2,7 +2,7 @@ import {
   getRandomInteger,
   getRandomArrayElement,
   getRandomElementsArray,
-  getRandomDate
+  getRandomDate,
 } from '../utils';
 
 const FILMS_NAMES = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`];
@@ -42,7 +42,6 @@ const COMMENTS = [{
 }];
 
 const COMMENTS_ID = [1, 2, 3, 4, 5];
-const YEAR_PRODUCTION = [`1997`, `1887`, `2000`];
 const DURATION = [`1h 60m`, `2h 00m`, `50m`];
 const GENRE = [`Western`, `Musical`, `Comedy`];
 const DESCRIPTIONS = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.split(`.`);
@@ -60,7 +59,6 @@ function createMockFilmCard() {
     rating: getRandomInteger(0, 10),
     poster: getRandomArrayElement(POSTERS),
     comments: Array.from(new Set(getRandomElementsArray(COMMENTS_ID))),
-    yearProduction: getRandomArrayElement(YEAR_PRODUCTION),
     duration: getRandomArrayElement(DURATION),
     genres: getRandomElementsArray(GENRE),
     description: getRandomElementsArray(DESCRIPTIONS).join(`,`),
@@ -75,6 +73,8 @@ function createMockFilmCard() {
   };
 
   item.releaseDate = getRandomDate();
+  item.yearProduction = item.releaseDate.year();
+
   return item;
 }
 
