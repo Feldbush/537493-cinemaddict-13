@@ -101,7 +101,7 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM`)}</td>
+              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM YYYY`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -185,7 +185,6 @@ export default class FilmPopUpView extends Component {
     this._data = filmData;
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
-    this._escKeyPressHandler = this._escKeyPressHandler.bind(this);
 
     this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
     this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
@@ -203,28 +202,11 @@ export default class FilmPopUpView extends Component {
   _crossClickHandler(evt) {
     evt.preventDefault();
     this._callback.crossClick(evt);
-    this.removeEscKeyPressHandler();
   }
 
   setCrossClickHandler(cb) {
     this._callback.crossClick = cb;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
-  }
-
-  _escKeyPressHandler(evt) {
-    if (evt.key === `Escape`) {
-      this._callback.escKeyPressDocument(evt);
-      this.removeEscKeyPressHandler();
-    }
-  }
-
-  setEscKeyPressHandler(cb) {
-    this._callback.escKeyPressDocument = cb;
-    document.addEventListener(`keydown`, this._escKeyPressHandler);
-  }
-
-  removeEscKeyPressHandler() {
-    document.removeEventListener(`keydown`, this._escKeyPressHandler);
   }
 
   _handleAddWatchListClick(evt) {

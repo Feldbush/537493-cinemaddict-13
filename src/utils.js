@@ -6,6 +6,12 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
+export const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
 export function getRandomInteger(a = 0, b = 1) {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -30,7 +36,9 @@ export function getRandomElementsArray(array, maxQuantityTry = 5) {
 }
 
 export function getRandomDate() {
-  return dayjs().add(getRandomInteger(1, 9), `day`).valueOf();
+  let nativeDate = new Date(getRandomInteger(1945, 2000), getRandomInteger(0, 11), getRandomInteger(0, 25));
+  let date = dayjs(nativeDate);
+  return date;
 }
 
 export function createElement(htmlString) {
@@ -101,4 +109,42 @@ export function updateItem(items, update) {
     update,
     ...items.slice(index + 1)
   ];
+}
+
+function getWeightForNullProperty(propA, propB) {
+  if (propA === null && propB === null) {
+    return 0;
+  }
+
+  if (propA === null) {
+    return 1;
+  }
+
+  if (propB === null) {
+    return -1;
+  }
+
+  return null;
+}
+
+export function getDateDiff({releaseDate: dateA}, {releaseDate: dateB}) {
+  const weight = getWeightForNullProperty(dateA, dateB);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  const difference = dayjs(dateA).diff(dayjs(dateB));
+
+  return difference;
+}
+
+export function getRatingDiff({rating: ratingA}, {rating: ratingB}) {
+  const weight = getWeightForNullProperty(ratingA, ratingB);
+
+  if (weight !== null) {
+    return weight;
+  }
+
+  return Number(ratingA - ratingB);
 }

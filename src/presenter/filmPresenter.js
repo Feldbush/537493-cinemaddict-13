@@ -22,6 +22,7 @@ export default class FilmPresenter {
     this._mode = Mode.DEFAULT;
 
     this._closeFilmPopUpHandler = this._closeFilmPopUpHandler.bind(this);
+    this._documentCloseFilmPopUpHandler = this._documentCloseFilmPopUpHandler.bind(this);
     this._openFilmPopUpHandler = this._openFilmPopUpHandler.bind(this);
 
     this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
@@ -81,7 +82,7 @@ export default class FilmPresenter {
   `;
     document.body.append(this._backdrop);
 
-    this._filmPopUp.setEscKeyPressHandler(this._closeFilmPopUpHandler);
+    document.addEventListener(`keydown`, this._documentCloseFilmPopUpHandler);
 
     this._changeMode();
     this._mode = Mode.POPUP;
@@ -93,13 +94,21 @@ export default class FilmPresenter {
     this._container.removeChild(this._filmPopUp.getElement());
     document.body.classList.remove(`hide-overflow`);
     document.body.removeChild(this._backdrop);
-    this._filmPopUp.removeEscKeyPressHandler();
     this._mode = Mode.DEFAULT;
   }
 
   _closeFilmPopUpHandler(evt) {
     evt.preventDefault();
     this._closeFilmPopUp();
+    document.removeEventListener(`keydown`, this._documentCloseFilmPopUpHandler);
+  }
+
+  _documentCloseFilmPopUpHandler(evt) {
+    evt.preventDefault();
+    if (evt.key === `Escape`) {
+      this._closeFilmPopUp();
+      document.removeEventListener(`keydown`, this._documentCloseFilmPopUpHandler);
+    }
   }
 
   _handleAddWatchListClick() {
