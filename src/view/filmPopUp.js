@@ -240,6 +240,8 @@ export default class FilmPopUpView extends Smart {
   }
 
   _chooseEmotion(emotionName) {
+    const currentEmotionRadioInput = this.getElement().querySelector(`.film-details__emoji-list #emoji-${emotionName}`);
+    currentEmotionRadioInput.checked = true;
     const field = this.getElement().querySelector(`.film-details__add-emoji-label`);
     if (field.children.length > 0) {
       field.innerHtml = ``;
@@ -251,6 +253,7 @@ export default class FilmPopUpView extends Smart {
   _emotionChoiceHandler(evt) {
     let selectEmotionValue = evt.target.value;
     if (typeof evt.target.value === `string`) {
+      evt.target.checked = true;
       this.updateState({emotion: evt.target.value});
       this._chooseEmotion(selectEmotionValue);
     }
