@@ -127,7 +127,7 @@ function getWeightForNullProperty(propA, propB) {
   return null;
 }
 
-export function getDateDiff({releaseDate: dateA}, {releaseDate: dateB}) {
+export function getDateDifference({releaseDate: dateA}, {releaseDate: dateB}) {
   const weight = getWeightForNullProperty(dateA, dateB);
 
   if (weight !== null) {
@@ -139,7 +139,7 @@ export function getDateDiff({releaseDate: dateA}, {releaseDate: dateB}) {
   return difference;
 }
 
-export function getRatingDiff({rating: ratingA}, {rating: ratingB}) {
+export function getRatingDifference({rating: ratingA}, {rating: ratingB}) {
   const weight = getWeightForNullProperty(ratingA, ratingB);
 
   if (weight !== null) {
@@ -147,4 +147,9 @@ export function getRatingDiff({rating: ratingA}, {rating: ratingB}) {
   }
 
   return Number(ratingA - ratingB);
+}
+
+
+export function generateId() {
+  return Date.now() + parseInt(Math.random() * 10000, 10);
 }

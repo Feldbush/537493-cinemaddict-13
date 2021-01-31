@@ -3,42 +3,49 @@ import {
   getRandomArrayElement,
   getRandomElementsArray,
   getRandomDate,
+  generateId
 } from '../utils';
 
 const FILMS_NAMES = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`];
 const POSTERS = [`sagebrush-trail.jpg`, `the-dance-of-life.jpg`, `the-man-with-the-golden-arm.jpg`];
-const EMOJI = [`angry.png`, `puke.png`, `sleeping.png`, `smile.png`];
+const emojiNames = [`angry`, `puke`, `sleeping`, `smile`];
+const Emoji = {
+  angry: `angry.png`,
+  puke: `puke.png`,
+  sleeping: `sleeping.png`,
+  smile: `smile.png`
+};
 
 const COMMENTS = [{
   id: 1,
   content: `WoooooW!`,
   author: `Petya`,
   date: getRandomDate(),
-  rank: getRandomInteger(0, 3)
+  emotion: getRandomArrayElement(emojiNames)
 }, {
   id: 2,
   content: `Cooool!`,
   author: `Bob`,
   date: getRandomDate(),
-  rank: getRandomInteger(0, 3)
+  emotion: getRandomArrayElement(emojiNames)
 }, {
   id: 3,
   content: `It's amazing!`,
   author: `Gena`,
   date: getRandomDate(),
-  rank: getRandomInteger(0, 3)
+  emotion: getRandomArrayElement(emojiNames)
 }, {
   id: 4,
   content: `What i seeeeeees?`,
   author: `Vova`,
   date: getRandomDate(),
-  rank: getRandomInteger(0, 3)
+  emotion: getRandomArrayElement(emojiNames)
 }, {
   id: 5,
   content: `Super!`,
   author: `Jack`,
   date: getRandomDate(),
-  rank: getRandomInteger(0, 3)
+  emotion: getRandomArrayElement(emojiNames)
 }];
 
 const COMMENTS_ID = [1, 2, 3, 4, 5];
@@ -49,7 +56,6 @@ const DIRECTORS = [`Petya Ivanov`, `Vasiliy Pupkin`, `Roman Chepuha`];
 const WRITERS = [`Anne Wigton`, `Heinz Herald`, `Richard Weil`];
 const COUNTRYS = [`USA`, `USSR`, `Brazil`];
 const AGES = [18, 16, 6];
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 function createMockFilmCard() {
   const item = {
@@ -81,7 +87,7 @@ function createMockFilmCard() {
 const filmsMockData = new Array(15).fill().map((item, index) => createMockFilmCard(index));
 
 export {
-  EMOJI,
+  Emoji,
   COMMENTS,
   filmsMockData,
   createMockFilmCard

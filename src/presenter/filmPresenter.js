@@ -21,13 +21,9 @@ export default class FilmPresenter {
     this._filmPopUp = null;
     this._mode = Mode.DEFAULT;
 
-    this._closeFilmPopUpHandler = this._closeFilmPopUpHandler.bind(this);
+    this._сrossClickPopUpHandler = this._сrossClickPopUpHandler.bind(this);
     this._documentCloseFilmPopUpHandler = this._documentCloseFilmPopUpHandler.bind(this);
     this._openFilmPopUpHandler = this._openFilmPopUpHandler.bind(this);
-
-    this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
-    this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
-    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
   }
 
   init(data, comments) {
@@ -40,16 +36,17 @@ export default class FilmPresenter {
     this._filmComponent = new FilmCardView(this._data);
     this._filmPopUp = new FilmPopUpView(this._data, this._comments);
 
+    this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
+    this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
+
     this._filmComponent.setPosterClickHandler(this._openFilmPopUpHandler);
     this._filmComponent.setHandleAddWatchListClick(this._handleAddWatchListClick);
     this._filmComponent.setHandleAddWatchedListClick(this._handleAddWatchedListClick);
     this._filmComponent.setHandleAddFavoriteClick(this._handleAddFavoriteClick);
 
 
-    this._filmPopUp.setCrossClickHandler(this._closeFilmPopUpHandler);
-    this._filmPopUp.setHandleAddWatchListClick(this._handleAddWatchListClick);
-    this._filmPopUp.setHandleAddWatchedListClick(this._handleAddWatchedListClick);
-    this._filmPopUp.setHandleAddFavoriteClick(this._handleAddFavoriteClick);
+    this._filmPopUp.setCrossClickHandler(this._сrossClickPopUpHandler);
 
     if (prevFilmComponent === null || prevFilmPopUp === null) {
       render(this._container, this._filmComponent);
@@ -91,20 +88,20 @@ export default class FilmPresenter {
   }
 
   _closeFilmPopUp() {
+    this._changeData(this._filmPopUp.getData());
     this._container.removeChild(this._filmPopUp.getElement());
     document.body.classList.remove(`hide-overflow`);
     document.body.removeChild(this._backdrop);
     this._mode = Mode.DEFAULT;
   }
 
-  _closeFilmPopUpHandler(evt) {
+  _сrossClickPopUpHandler(evt) {
     evt.preventDefault();
     this._closeFilmPopUp();
     document.removeEventListener(`keydown`, this._documentCloseFilmPopUpHandler);
   }
 
   _documentCloseFilmPopUpHandler(evt) {
-    evt.preventDefault();
     if (evt.key === `Escape`) {
       this._closeFilmPopUp();
       document.removeEventListener(`keydown`, this._documentCloseFilmPopUpHandler);
