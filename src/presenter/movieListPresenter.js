@@ -5,7 +5,7 @@ import FilterView from '../view/filter';
 import ShowMoreButtonView from '../view/showMoreBtn';
 import FilmPresenter from './filmPresenter';
 
-import {render, isEmptyData, remove, updateItem, SortType, getDateDiff, getRatingDiff} from '../utils.js';
+import {render, isEmptyData, remove, updateItem, SortType, getDateDifference, getRatingDifference} from '../utils.js';
 
 import {
   generateFilter
@@ -59,10 +59,10 @@ export default class MovieList {
   _sortFilmsCards(sortType) {
     switch (sortType) {
       case SortType.DATE:
-        this._filmsData.sort(getDateDiff);
+        this._filmsData.sort(getDateDifference);
         break;
       case SortType.RATING:
-        this._filmsData.sort(getRatingDiff);
+        this._filmsData.sort(getRatingDifference);
         break;
 
       default:

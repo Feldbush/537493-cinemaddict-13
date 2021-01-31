@@ -1,8 +1,8 @@
-import {EMOJI} from '../mock/film';
+import {Emoji} from '../mock/film';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Component from './component';
 import {createElement} from '../utils';
+import Smart from './smart';
 
 dayjs.extend(relativeTime);
 
@@ -35,7 +35,25 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
     return `${prev} <span class="film-details__genres">${item}</span>`;
   }, ``);
 
-  let commentsTemplate = commentsFull
+  function getCommentTemplate(author, comment, date, emotion) {
+    let content = `<li class="film-details__comment">
+    <span class="film-details__comment-emoji">
+      <img src="./images/emoji/${Emoji[emotion]}" width="55" height="55" alt="emoji-sleeping">
+    </span>
+    <div>
+      <p class="film-details__comment-text">${comment}</p>
+      <p class="film-details__comment-info">
+        <span class="film-details__comment-author">${author}</span>
+        <span class="film-details__comment-day">${date.format(`YYYY/MM/D H:mm`)}</span>
+        <button class="film-details__comment-delete">Delete</button>
+      </p>
+    </div>
+    </li>`;
+
+    return content;
+  }
+
+  let filteredComments = commentsFull
     .filter((item) => {
       for (let i = 0; i < comments.length; i++) {
         if (comments[i] === item.id) {
@@ -43,23 +61,13 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
         }
       }
       return false;
-    })
-    .reduce((accumulator, item) => {
-      const comment = `${accumulator} <li class="film-details__comment">
-    <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${EMOJI[item.rank]}" width="55" height="55" alt="emoji-sleeping">
-    </span>
-    <div>
-      <p class="film-details__comment-text">${item.content}</p>
-      <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${item.author}</span>
-        <span class="film-details__comment-day">${dayjs().from(item.date)}</span>
-        <button class="film-details__comment-delete">Delete</button>
-      </p>
-    </div>
-  </li>`;
-      return comment;
-    }, ``);
+    });
+
+  let commentsTemplate = filteredComments.reduce((accumulator, commentItem) => {
+    const {author, content, date, emotion} = commentItem;
+    let result = `${accumulator} ${getCommentTemplate(author, content, date, emotion)}`;
+    return result;
+  }, ``);
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -179,28 +187,28 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
 </section>`;
 }
 
-export default class FilmPopUpView extends Component {
+export default class FilmPopUpView extends Smart {
   constructor(filmData, commentsFull) {
     super();
     this._data = filmData;
+    this._state = FilmPopUpView.parseFilmDataToState(this._data);
     this._comments = commentsFull;
     this._crossClickHandler = this._crossClickHandler.bind(this);
 
-    this._handleAddWatchListClick = this._handleAddWatchListClick.bind(this);
-    this._handleAddWatchedListClick = this._handleAddWatchedListClick.bind(this);
-    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
+    this._handlerAddWatchListToggle = this._handlerAddWatchListToggle.bind(this);
+    this._handlerAddHistoryToggle = this._handlerAddHistoryToggle.bind(this);
+    this._handlerAddFavoriteToggle = this._handlerAddFavoriteToggle.bind(this);
+    this._emotionChoiceHandler = this._emotionChoiceHandler.bind(this);
+    this._chooseEmotion = this._chooseEmotion.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createFilmPopUpViewTemplate(this._data, this._comments);
-  }
-
-  updateElement(data) {
-    this._element = createElement(createFilmPopUpViewTemplate(data, this._comments));
+    return createFilmPopUpViewTemplate(this._state, this._comments);
   }
 
   _crossClickHandler(evt) {
-    evt.preventDefault();
     this._callback.crossClick(evt);
   }
 
@@ -209,33 +217,65 @@ export default class FilmPopUpView extends Component {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._crossClickHandler);
   }
 
-  _handleAddWatchListClick(evt) {
+  _handlerAddWatchListToggle(evt) {
     evt.preventDefault();
-    this._callback.addWatchListClick(evt);
+    this.updateState({isInWatchList: !this._state.isInWatchList});
   }
 
-  setHandleAddWatchListClick(cb) {
-    this._callback.addWatchListClick = cb;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._handleAddWatchListClick);
-  }
-
-  _handleAddWatchedListClick(evt) {
+  _handlerAddHistoryToggle(evt) {
     evt.preventDefault();
-    this._callback.addWatchedListClick(evt);
+    this.updateState({isInHistory: !this._state.isInHistory});
   }
 
-  setHandleAddWatchedListClick(cb) {
-    this._callback.addWatchedListClick = cb;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._handleAddWatchedListClick);
-  }
-
-  _handleAddFavoriteClick(evt) {
+  _handlerAddFavoriteToggle(evt) {
     evt.preventDefault();
-    this._callback.addFavoriteClick(evt);
+    this.updateState({isInFavorite: !this._state.isInFavorite});
   }
 
-  setHandleAddFavoriteClick(cb) {
-    this._callback.addFavoriteClick = cb;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._handleAddFavoriteClick);
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._handlerAddWatchListToggle);
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._handlerAddHistoryToggle);
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._handlerAddFavoriteToggle);
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emotionChoiceHandler);
+  }
+
+  _chooseEmotion(emotionName) {
+    const field = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    if (field.children.length > 0) {
+      field.innerHtml = ``;
+    }
+    const emotion = createElement(`<img src="images/emoji/${emotionName}.png" width="55" height="55" alt="emoji-${emotionName}">`);
+    field.append(emotion);
+  }
+
+  _emotionChoiceHandler(evt) {
+    let selectEmotionValue = evt.target.value;
+    if (typeof evt.target.value === `string`) {
+      this.updateState({emotion: evt.target.value});
+      this._chooseEmotion(selectEmotionValue);
+    }
+  }
+
+  getData() {
+    return FilmPopUpView.parseStateToFilmData(this._state);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setCrossClickHandler(this._callback.crossClick);
+  }
+
+  static parseFilmDataToState(filmData) {
+    return Object.assign(
+        {},
+        filmData
+    );
+  }
+
+  static parseStateToFilmData(state) {
+    return Object.assign(
+        {},
+        state
+    );
   }
 }
