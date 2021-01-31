@@ -35,12 +35,6 @@ export function getRandomElementsArray(array, maxQuantityTry = 5) {
   return resultArray;
 }
 
-export function getRandomDate() {
-  let nativeDate = new Date(getRandomInteger(1945, 2000), getRandomInteger(0, 11), getRandomInteger(0, 25));
-  let date = dayjs(nativeDate);
-  return date;
-}
-
 export function createElement(htmlString) {
   const tmpContainer = document.createElement(`div`);
   tmpContainer.innerHTML = htmlString;

@@ -1,10 +1,12 @@
 import {Emoji} from '../mock/film';
 import dayjs from 'dayjs';
+import duration from "dayjs/plugin/duration";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {createElement} from '../utils';
 import Smart from './smart';
 
 dayjs.extend(relativeTime);
+dayjs.extend(duration);
 
 function createFilmPopUpViewTemplate(data, commentsFull) {
   const {
@@ -13,19 +15,29 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
     rating,
     poster,
     comments,
-    duration,
+    runtime,
     genres,
     description,
     director,
     writers,
     actors,
-    releaseDate,
-    country,
+    release,
     minAge,
     isInWatchList,
     isInHistory,
     isInFavorite
   } = data;
+
+
+  function getRuntimeInformat(durationFilm) {
+    const MINUTES_IN_HOUR = 60;
+
+    const hoursInRuntime = Math.floor(dayjs.duration(durationFilm, `minutes`).asHours());
+    const minutesRuntime = runtime - (hoursInRuntime * MINUTES_IN_HOUR);
+    const filmDurationProp = {hours: hoursInRuntime, minutes: minutesRuntime};
+
+    return filmDurationProp;
+  }
 
   if (!name) {
     return ``;
@@ -44,7 +56,7 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
       <p class="film-details__comment-text">${comment}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${date.format(`YYYY/MM/D H:mm`)}</span>
+        <span class="film-details__comment-day">${dayjs(date).format(`YYYY/MM/D H:mm`)}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
@@ -55,12 +67,7 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
 
   let filteredComments = commentsFull
     .filter((item) => {
-      for (let i = 0; i < comments.length; i++) {
-        if (comments[i] === item.id) {
-          return true;
-        }
-      }
-      return false;
+      return comments.includes(item.id);
     });
 
   let commentsTemplate = filteredComments.reduce((accumulator, commentItem) => {
@@ -109,15 +116,15 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${dayjs(releaseDate).format(`D MMMM YYYY`)}</td>
+              <td class="film-details__cell">${dayjs(release.date).format(`D MMMM YYYY`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getRuntimeInformat(runtime).hours} h ${getRuntimeInformat(runtime).minutes > 0 ? (getRuntimeInformat(runtime).minutes) + ` mm` : ``}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${country}</td>
+              <td class="film-details__cell">${release.release_country}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">${genres.length > 1 ? `Genres` : `Genre`}</td>
@@ -241,7 +248,7 @@ export default class FilmPopUpView extends Smart {
 
   _chooseEmotion(emotionName) {
     const currentEmotionRadioInput = this.getElement().querySelector(`.film-details__emoji-list #emoji-${emotionName}`);
-    currentEmotionRadioInput.checked = true;
+    currentEmotionRadioInput.setAttribute(`checked`, true);
     const field = this.getElement().querySelector(`.film-details__add-emoji-label`);
     if (field.children.length > 0) {
       field.innerHtml = ``;
@@ -253,7 +260,6 @@ export default class FilmPopUpView extends Smart {
   _emotionChoiceHandler(evt) {
     let selectEmotionValue = evt.target.value;
     if (typeof evt.target.value === `string`) {
-      evt.target.checked = true;
       this.updateState({emotion: evt.target.value});
       this._chooseEmotion(selectEmotionValue);
     }
