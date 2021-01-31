@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import Component from './component';
-import {getRunTimeInformat} from '../utils';
+import {getRuntimeInFormat} from '../utils';
 
 function createFilmCardViewTemplate(data) {
   const {
@@ -21,7 +21,7 @@ function createFilmCardViewTemplate(data) {
   <p class="film-card__rating">${rating}</p>
   <p class="film-card__info">
     <span class="film-card__year">${dayjs(release.date).format(`YYYY`)}</span>
-    <span class="film-card__duration">${getRunTimeInformat(runtime).hours} h ${getRunTimeInformat(runtime).minutes > 0 ? (getRunTimeInformat(runtime).minutes) + ` mm` : ``}</span>
+    <span class="film-card__duration">${getRuntimeInFormat(runtime).hours} h ${getRuntimeInFormat(runtime).minutes > 0 ? (getRuntimeInFormat(runtime).minutes) + ` m` : ``}</span>
     <span class="film-card__genre">${genres[0]}</span>
   </p>
   <img src="./images/posters/${poster}" alt="" class="film-card__poster">

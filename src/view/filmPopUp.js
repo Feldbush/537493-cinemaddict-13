@@ -2,7 +2,7 @@ import {Emoji} from '../mock/film';
 import dayjs from 'dayjs';
 import duration from "dayjs/plugin/duration";
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {createElement, getRunTimeInformat} from '../utils';
+import {createElement, getRuntimeInFormat} from '../utils';
 import Smart from './smart';
 
 dayjs.extend(relativeTime);
@@ -109,7 +109,7 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${getRunTimeInformat(runtime).hours} h ${getRunTimeInformat(runtime).minutes > 0 ? (getRunTimeInformat(runtime).minutes) + ` mm` : ``}</td>
+              <td class="film-details__cell">${getRuntimeInFormat(runtime).hours} h ${getRuntimeInFormat(runtime).minutes > 0 ? (getRuntimeInFormat(runtime).minutes) + ` m` : ``}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
