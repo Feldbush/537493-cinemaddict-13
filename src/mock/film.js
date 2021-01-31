@@ -78,7 +78,7 @@ function createMockFilmCard() {
 
   item.release = {
     date: `2019-05-11T00:00:00.000Z`,
-    release_country: getRandomArrayElement(COUNTRYS)
+    releaseCountry: getRandomArrayElement(COUNTRYS)
   };
 
   return item;

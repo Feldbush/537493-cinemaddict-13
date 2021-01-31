@@ -2,7 +2,7 @@ import {Emoji} from '../mock/film';
 import dayjs from 'dayjs';
 import duration from "dayjs/plugin/duration";
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {createElement} from '../utils';
+import {createElement, getRunTimeInformat} from '../utils';
 import Smart from './smart';
 
 dayjs.extend(relativeTime);
@@ -27,17 +27,6 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
     isInHistory,
     isInFavorite
   } = data;
-
-
-  function getRuntimeInformat(durationFilm) {
-    const MINUTES_IN_HOUR = 60;
-
-    const hoursInRuntime = Math.floor(dayjs.duration(durationFilm, `minutes`).asHours());
-    const minutesRuntime = runtime - (hoursInRuntime * MINUTES_IN_HOUR);
-    const filmDurationProp = {hours: hoursInRuntime, minutes: minutesRuntime};
-
-    return filmDurationProp;
-  }
 
   if (!name) {
     return ``;
@@ -120,11 +109,11 @@ function createFilmPopUpViewTemplate(data, commentsFull) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${getRuntimeInformat(runtime).hours} h ${getRuntimeInformat(runtime).minutes > 0 ? (getRuntimeInformat(runtime).minutes) + ` mm` : ``}</td>
+              <td class="film-details__cell">${getRunTimeInformat(runtime).hours} h ${getRunTimeInformat(runtime).minutes > 0 ? (getRunTimeInformat(runtime).minutes) + ` mm` : ``}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.release_country}</td>
+              <td class="film-details__cell">${release.releaseCountry}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">${genres.length > 1 ? `Genres` : `Genre`}</td>

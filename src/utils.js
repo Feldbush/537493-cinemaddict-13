@@ -147,3 +147,13 @@ export function getRatingDifference({rating: ratingA}, {rating: ratingB}) {
 export function generateId() {
   return Date.now() + parseInt(Math.random() * 10000, 10);
 }
+
+export function getRunTimeInformat(durationFilm) {
+  const MINUTES_IN_HOUR = 60;
+
+  const hoursInRuntime = Math.floor(dayjs.duration(durationFilm, `minutes`).asHours());
+  const minutesRuntime = durationFilm - (hoursInRuntime * MINUTES_IN_HOUR);
+  const filmDurationProp = {hours: hoursInRuntime, minutes: minutesRuntime};
+
+  return filmDurationProp;
+}
